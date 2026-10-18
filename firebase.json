@@ -1,0 +1,14 @@
+{
+  "functions": [{ "source": "functions", "codebase": "default" }],
+  "firestore": { "database": "cse-desk-user-data", "rules": "firestore.rules" },
+  "hosting": {
+    "public": ".",
+    "ignore": ["firebase.json", "firestore.rules", "**/.*", "**/node_modules/**", "functions/**", "README.md"],
+    "headers": [{
+      "source": "/**",
+      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+    }],
+    "cleanUrls": true,
+    "trailingSlash": true
+  }
+}

@@ -1,0 +1,116 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Collection path: users/{userId}/attempts/{attemptId}
+// Document ID: Firestore-generated or client-generated attempt ID.
+// Fields (all required, with no additional fields permitted):
+//   - examName: string, 1–40 chars; one of the app's allowed exam names.
+//   - testName: string, 1–40 chars; must match examName.
+//   - score: number from 0 through total; app scoring formula,
+//     rounded to two decimal places: max(0, correct*2 - incorrect*0.66).
+//   - total: integer from 2 through 200; exactly questionCount*2.
+//   - correct: integer from 0 through questionCount.
+//   - incorrect: integer from 0 through questionCount; correct+incorrect
+//     cannot exceed questionCount.
+//   - questionCount: integer from 1 through 100.
+//   - percentage: integer from 0 through 100; rounded correct/questionCount.
+//   - createdAt: timestamp; must equal request.time at creation.
+//
+// Ownership is represented by the parent path's userId. There is deliberately
+// no uid field, profile document, or email-preference document in this model.
+// Only the authenticated owner can read or create attempts under that path.
+// Attempts cannot be updated or deleted.
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // The UID is part of the path, rather than mutable document data.
+    function uidUnchanged(userId) {
+      return isOwner(userId);
+    }
+
+    function hasRequiredFields(data) {
+      return data.keys().hasAll([
+        'examName', 'testName', 'score', 'total', 'correct', 'incorrect',
+        'questionCount', 'percentage', 'createdAt'
+      ]);
+    }
+
+    function hasOnlyAllowedFields(data) {
+      return data.keys().hasOnly([
+        'examName', 'testName', 'score', 'total', 'correct', 'incorrect',
+        'questionCount', 'percentage', 'createdAt'
+      ]);
+    }
+
+    function isValidExamName(data) {
+      return data.examName is string &&
+        data.examName.size() <= 40 &&
+        data.examName in ['Polity foundation sampler', 'UPSC Prelims 2026 GS-I practice', 'Daily Exam Pulse'] &&
+        data.testName is string &&
+        data.testName.size() > 0 &&
+        data.testName.size() <= 40 &&
+        data.testName == data.examName;
+    }
+
+    function isValidCounts(data) {
+      return data.questionCount is int &&
+        data.questionCount >= 1 && data.questionCount <= 100 &&
+        data.correct is int && data.correct >= 0 &&
+        data.incorrect is int && data.incorrect >= 0 &&
+        data.correct + data.incorrect <= data.questionCount;
+    }
+
+    function isValidScore(data) {
+      let rawScore = data.correct * 2 - data.incorrect * 0.66;
+      return data.score is number &&
+        data.score >= 0 && data.score <= data.total &&
+        ((rawScore <= 0 && data.score == 0) ||
+          (rawScore > 0 && data.score == math.round(rawScore * 100) / 100));
+    }
+
+    function isValidAttempt(data) {
+      return hasRequiredFields(data) &&
+        hasOnlyAllowedFields(data) &&
+        isValidExamName(data) &&
+        isValidCounts(data) &&
+        data.total is int &&
+        data.total >= 2 && data.total <= 200 &&
+        data.total == data.questionCount * 2 &&
+        data.percentage is int &&
+        data.percentage >= 0 && data.percentage <= 100 &&
+        data.percentage == math.round(data.correct / data.questionCount * 100) &&
+        isValidScore(data) &&
+        data.createdAt is timestamp && data.createdAt == request.time;
+    }
+
+    match /users/{userId}/attempts/{attemptId} {
+      allow read: if isOwner(userId);
+
+      // New attempts are strictly schema-checked and scoped to the caller's UID.
+      allow create: if uidUnchanged(userId) && isValidAttempt(request.resource.data);
+
+      // Attempts are immutable after creation; this also keeps createdAt and
+      // computed result fields from being rewritten later.
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    // Default deny for user documents, other collections, and deeper paths.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

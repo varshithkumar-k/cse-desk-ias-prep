@@ -1,0 +1,11 @@
+node_modules/
+.firebase/
+.env
+.env.*
+!.env.example
+firebase-debug.log
+firestore-debug.log
+*.log
+coverage/
+.DS_Store
+Thumbs.db

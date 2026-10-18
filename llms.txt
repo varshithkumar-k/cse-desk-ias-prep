@@ -1,0 +1,14 @@
+# CSE Desk
+
+> CSE Desk is an independent study tool for people preparing for the UPSC Civil Services Examination.
+
+## Pages
+- [Dashboard](/): Study overview and next steps.
+- [Mock tests](/mock-tests/): Timed practice with answer explanations.
+- [Exam Pulse](/exam-pulse/): Daily rotating original practice questions and official UPSC paper links.
+- [Daily practice](/practice/): A multiple-choice question and a Mains answer-planning exercise.
+- [Progress](/progress/): Locally stored mock test results.
+- [AI study help](/ai-study/): Prepared prompts for ChatGPT and Gemini.
+- [Account](/account/): Verified email sign-in and result-email preferences. Sign-in requires configured Firebase services.
+
+Practice questions are not official UPSC papers or predictions. AI responses should be checked against authoritative sources. Official previous question papers are linked from the Exam Pulse page.
