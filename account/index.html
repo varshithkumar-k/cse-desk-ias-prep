@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" data-root="../">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Account and result emails — CSE Desk</title>
+  <meta name="description" content="Sign in to CSE Desk with a verified email and choose whether to receive your Civil Services mock test results by email.">
+  <meta name="robots" content="noindex,follow"><link rel="canonical" href="/account/">
+  <meta property="og:type" content="website"><meta property="og:title" content="Account and result emails — CSE Desk"><meta property="og:description" content="Manage verified sign-in and mock test result email preferences."><meta property="og:image" content="../assets/social-card.png"><meta property="og:image:alt" content="CSE Desk account and result email settings.">
+  <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Account and result emails — CSE Desk"><meta name="twitter:description" content="Manage verified sign-in and mock test result email preferences."><meta name="twitter:image" content="../assets/social-card.png"><meta name="twitter:image:alt" content="CSE Desk account and result email settings.">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="../assets/site.css?v=20261017-1">
+  <script src="../assets/seo.js?v=20261017-1" defer></script><script type="module" src="../assets/account.js?v=20261017-1"></script>
+</head>
+<body><div class="shell">
+  <aside class="sidebar"><a class="brand" href="../" aria-label="CSE Desk home"><span class="brand-mark">C</span><span><span class="brand-name">CSE DESK</span><span class="brand-sub" style="display:block">Civil services preparation</span></span></a><p class="nav-label">Study</p><nav class="nav" aria-label="Main navigation"><a href="../"><span class="nav-symbol">⌂</span>Dashboard</a><a href="../mock-tests/"><span class="nav-symbol">▤</span>Mock tests</a><a href="../exam-pulse/"><span class="nav-symbol">◷</span>Exam Pulse</a><a href="../practice/"><span class="nav-symbol">✎</span>Daily practice</a><a href="../progress/"><span class="nav-symbol">↗</span>Progress</a><a href="../ai-study/"><span class="nav-symbol">◇</span>AI study help</a><a href="./" aria-current="page"><span class="nav-symbol">○</span>Account</a></nav><div class="sidebar-bottom"><strong>One question at a time.</strong>Build a steady habit with practice, review, and revision.</div></aside>
+  <div class="main-column"><header class="topbar"><div class="breadcrumb"><a href="../">CSE Desk</a> / Account</div><div class="profile"><span class="profile-mark" data-profile-mark aria-hidden="true">S</span><span class="profile-name" data-user-email>Study session</span></div></header>
+    <main class="content"><header class="page-heading"><p class="page-kicker">Your account</p><h1>Sign in and manage result emails</h1><p class="lede">Use a one-time email link to verify your inbox. Sign-in is required to take a mock test and save results to your private account history.</p></header>
+      <div class="account-grid">
+        <section class="panel panel-pad" data-signin-view>
+          <h2>Email sign-in</h2><p class="account-copy">We’ll send a secure sign-in link to your inbox. Opening it verifies the email address for this account.</p>
+          <form data-signin-form><label class="field-label" for="signin-email">Email address</label><input class="text-input" id="signin-email" name="email" type="email" autocomplete="email" required placeholder="you@example.com"><div class="button-row" style="margin-top:14px"><button class="button" type="submit">Send sign-in link</button></div><p class="help-copy" style="margin-top:12px">No password is stored by this app. The one-time link is sent by Firebase Authentication.</p></form>
+        </section>
+        <section class="panel panel-pad" data-account-view hidden>
+          <div class="section-head"><div><h2>Signed-in account</h2><p data-verification-state>Verified email</p></div><button class="button button-quiet" type="button" data-signout>Sign out</button></div>
+          <p class="account-email" data-user-email-detail>—</p>
+          <div class="quiet-divider"></div>
+          <label class="checkbox-row"><input type="checkbox" data-auto-email><span><strong>Automatically email my results</strong><small>Send each completed mock test to this verified email address.</small></span></label>
+          <p class="help-copy" data-email-preference-status>Automatic result emails are off.</p>
+        </section>
+      </div>
+      <div class="notice auth-status" data-auth-status role="status" aria-live="polite">Sign in with a verified email before asking for result delivery.</div>
+      <div class="notice setup-note" data-config-note hidden><strong>Sign-in setup is needed before activation.</strong><p>Add your Firebase web configuration and App Check site key in <code>assets/firebase-config.js</code>, enable email-link sign-in in Firebase Authentication, then deploy the result-email function. Setup steps are in the README.</p></div>
+      <section class="panel panel-pad account-security"><h2>Your account data</h2><ul><li>Mock-test history is stored under your Firebase user ID, not in shared browser storage.</li><li>Firestore rules allow a signed-in account to read only its own attempts; result records cannot be edited or deleted from the app.</li><li>Result emails go only to the email address in your verified Firebase sign-in token.</li><li>Automatic result emails stay off until you enable them. Firebase App Check is required before delivery is activated.</li></ul></section>
+      <footer class="footer"><span>Sign in with a verified email to keep your study history private.</span><span><a href="../mock-tests/">Mock tests</a> &nbsp;·&nbsp; <a href="../exam-pulse/">Exam Pulse</a></span></footer>
+    </main>
+  </div>
+</div></body></html>
